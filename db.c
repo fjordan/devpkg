@@ -36,7 +36,7 @@ static bstring DB_load()
 int DB_update(const char *url)
 {
   if (DB_find(url)) {
-    log_info("Already recorded as installed: %s", url);
+	log_info("Already recorded as installed: %s", url);
   }
 
   FILE *db = DB_open(DB_FILE, "a+");
@@ -60,13 +60,13 @@ int DB_find(const char *url)
   bstring line = bfromcstr(url);
   int res = -1;
 
-  data = DB_load(DB_FILE);
+  data = DB_load();
   check(data, "Failed to load: %s", DB_FILE);
 
   if (binstr(data, 0, line) == BSTR_ERR) {
-    res = 0;
+	res = 0;
   } else {
-    res = 1;
+	res = 1;
   }
 
  error: // fallthrough
@@ -83,16 +83,16 @@ int DB_init()
   apr_pool_create(&p, NULL);
 
   if (access(DB_DIR, W_OK | X_OK) == -1) {
-    apr_status_t rc = apr_dir_make_recursive(DB_DIR,
-                      APR_UREAD | APR_UWRITE | APR_UEXECUTE |
-                      APR_GREAD | APR_GWRITE | APR_GEXECUTE, p)
-      check(rc == APR_SUCCESS, "Failed to make database dir: %s", DB_DIR);
+	apr_status_t rc = apr_dir_make_recursive(DB_DIR,
+					  APR_UREAD | APR_UWRITE | APR_UEXECUTE |
+											 APR_GREAD | APR_GWRITE | APR_GEXECUTE, p);
+	  check(rc == APR_SUCCESS, "Failed to make database dir: %s", DB_DIR);
   }
 
   if (access(DB_FILE, W_OK) == -1) {
-    FILE *db = DB_open(DB_FILE, "w");
-    check(db, "Cannot open database: %s", DB_FILE);
-    DB_close(db);
+	FILE *db = DB_open(DB_FILE, "w");
+	check(db, "Cannot open database: %s", DB_FILE);
+	DB_close(db);
   }
 
   apr_pool_destroy(p);

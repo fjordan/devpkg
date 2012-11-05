@@ -3,7 +3,7 @@
 
 #define MAX_COMMAND_ARGS 100
 
-#include <apre_thread_proc.h>
+#include <apr_thread_proc.h>
 
 typedef struct Shell {
   const char *dir;
